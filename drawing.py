@@ -2,30 +2,18 @@ import pygame
 
 SCALE = 20
 PADDING = SCALE*2
-PRIMARY = "black"
-SECONDARY = "white"
 
 def draw_side_by_side(a, b):
-    dimensions = (PADDING + len(a)*SCALE + PADDING + len(b)*SCALE + PADDING, PADDING + len(a)*SCALE + PADDING)
+    dimensions = (PADDING + len(a[0])*SCALE + PADDING + len(b[0])*SCALE + PADDING, PADDING + len(a[0])*SCALE + PADDING)
 
     screen = init(dimensions)
     aCorner = (PADDING,PADDING)
-    bCorner = (PADDING + len(a)*SCALE + PADDING,PADDING)
-    for row in range(len(a)):
-        for col in range(len(a)):
-            color = PRIMARY if a[row][col] == 1 else SECONDARY
-            pos = (aCorner[0] + col*SCALE,aCorner[1] + row*SCALE) 
-            pygame.draw.rect(screen,color,pygame.Rect(pos,(SCALE,SCALE)))
-    for row in range(len(b)):
-        for col in range(len(b)):
-            color = PRIMARY if b[row][col] == 1 else SECONDARY
-            pos = (bCorner[0] + col*SCALE,bCorner[1] + row*SCALE) 
-            pygame.draw.rect(screen,color,pygame.Rect(pos,(SCALE,SCALE)))
+    bCorner = (PADDING + len(a[0])*SCALE + PADDING,PADDING)
+    draw(a,aCorner,screen)
+    draw(b,bCorner,screen)
 
     pygame.display.flip()
 
-
-    
     awaitQuit()
 
 
@@ -43,3 +31,12 @@ def awaitQuit():
         if event.type == pygame.QUIT:  
             running = False
 
+def draw(channels, corner,screen):
+    for row in range(len(channels[0])):
+        for col in range(len(channels[0])):
+            r = channels[0][row][col] * 255 
+            g = channels[1][row][col] * 255 
+            b = channels[2][row][col] * 255 
+            color = pygame.Color(r,g,b)
+            pos = (corner[0] + col*SCALE, corner[1] + row*SCALE) 
+            pygame.draw.rect(screen,color,pygame.Rect(pos,(SCALE,SCALE)))

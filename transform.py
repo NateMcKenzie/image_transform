@@ -1,24 +1,24 @@
 import drawing
 
 def main():
-    inputMatrix = []
-    with open("input.txt") as inputFile:
-        for line in inputFile:
-            values = []
-            splits = line.split(" ")
-            #Remove newline character
-            splits.pop(-1)
-            for split in splits:
-                values.append(int(split))
-            inputMatrix.append(values)
+    #It's not pretty, but I'm just going to the same thing for each channel 
+    redMatrix = readMatrix("red.txt")
+    greenMatrix = readMatrix("green.txt")
+    blueMatrix = readMatrix("blue.txt")
+    elementary = flipYMatrix(len(redMatrix))
 
-    elementary = flipYMatrix(len(inputMatrix))
     #Flip Y
-    flipped = multiplyMatrix(inputMatrix,elementary)
-    drawing.draw_side_by_side(inputMatrix, flipped)
+    flippedR = multiplyMatrix(redMatrix,elementary)
+    flippedG = multiplyMatrix(greenMatrix,elementary)
+    flippedB = multiplyMatrix(blueMatrix,elementary)
+
+    drawing.draw_side_by_side((redMatrix,greenMatrix,blueMatrix), (flippedR,flippedG,flippedB))
     #Flip X
-    flipped  = multiplyMatrix(elementary,inputMatrix)
-    drawing.draw_side_by_side(inputMatrix, flipped)
+    flippedR = multiplyMatrix(elementary,redMatrix)
+    flippedG = multiplyMatrix(elementary,greenMatrix)
+    flippedB = multiplyMatrix(elementary,blueMatrix)
+
+    drawing.draw_side_by_side((redMatrix,greenMatrix,blueMatrix), (flippedR,flippedG,flippedB))
 
 #Assume all matrices are square 
 def flipYMatrix(size:int):
@@ -47,5 +47,20 @@ def dot(row,col):
     for i in range(len(row)):
         result += row[i]*col[i]
     return result
+
+def readMatrix(file):
+    inputMatrix = []
+    with open(file) as inputFile:
+        for line in inputFile:
+            values = []
+            splits = line.split(" ")
+            #Remove newline character
+            splits.pop(-1)
+            for split in splits:
+                values.append(int(split))
+            inputMatrix.append(values)
+    return inputMatrix
+
+
 
 main()
